@@ -21,7 +21,7 @@ import pandas as pd
 import seaborn as sns
 from sklearn.base import BaseEstimator, ClassifierMixin, clone
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.externals import six
+import six
 from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
@@ -30,8 +30,10 @@ from sklearn.pipeline import Pipeline, _name_estimators
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.tree import DecisionTreeClassifier
 
+
 # 1) Exploratory Data Analysis
 df = pd.read_excel('C:\\Users\\jloss\\PyCharmProjects\\Machine-Learning-in-Finance-Final-Project\\data\\GP1_CreditScore.xlsx', sep = ',')
+
 df.shape
 df.info()
 df.head()
@@ -54,12 +56,12 @@ hm = sns.heatmap(cm,
                  annot_kws = { 'size':3 },
                  yticklabels = cols,
                  xticklabels = cols)
-plt.savefig('correlation matrix.png', dpi = 3000)
+plt.savefig('correlation matrix.png',dpi=960 )
 plt.show()
 
 X = df[['Sales/Revenues', 'Gross Margin', 'EBITDA', 'EBITDA Margin', 'Net Income Before Extras',
         'Total Debt', 'Net Debt', 'LT Debt', 'ST Debt', 'Cash', 'Free Cash Flow', 'Total Debt/EBITDA',
-        'Net Debt/EBITDA', 'Total MV', 'Total Debt/MV', 'Net Debt/MV', 'CFO/Debt','CFO',
+        'Net Debt/EBITDA', 'Total MV', 'Total Debt/MV', 'Net Debt/MV', 'CFO/Debt', 'CFO',
         'Interest Coverage', 'Total Liquidity', 'Current Liquidity', 'Current Liabilities',
         'EPS Before Extras', 'PE', 'ROA', 'ROE']].values
 
@@ -142,7 +144,7 @@ best_model_tree = grid_tree.best_estimator_
 print(best_model_tree.score(X_test_std, y_test))
 
 # Logistic Regression
-lr = LogisticRegression(max_iter = 1000,solver = 'lbfgs')
+lr = LogisticRegression(max_iter = 1000, solver = 'lbfgs', multi_class = 'auto')
 params_lr = {
     'C':range(1, 101),
     'random_state':[42]
@@ -157,6 +159,7 @@ grid_lr.fit(X_train_std, y_train)
 best_model_lr = grid_lr.best_estimator_
 
 print(best_model_lr.score(X_test_std, y_test))
+
 
 # 5) Ensembling
 # Majority Vote Classifier
@@ -275,6 +278,7 @@ class MajorityVoteClassifier(BaseEstimator,
                     out['%s__%s' % (name, key)] = value
             return out
 
+
 # Ensembling
 clf1 = grid_knn.best_estimator_
 clf2 = grid_forest.best_estimator_
@@ -298,7 +302,7 @@ for clf, label in zip(all_clf, clf_labels):
 # muti
 X = df[['Sales/Revenues', 'Gross Margin', 'EBITDA', 'EBITDA Margin', 'Net Income Before Extras',
         'Total Debt', 'Net Debt', 'LT Debt', 'ST Debt', 'Cash', 'Free Cash Flow', 'Total Debt/EBITDA',
-        'Net Debt/EBITDA', 'Total MV', 'Total Debt/MV', 'Net Debt/MV', 'CFO/Debt','CFO', 'Interest Coverage',
+        'Net Debt/EBITDA', 'Total MV', 'Total Debt/MV', 'Net Debt/MV', 'CFO/Debt', 'CFO', 'Interest Coverage',
         'Total Liquidity', 'Current Liquidity', 'Current Liabilities', 'EPS Before Extras', 'PE', 'ROA', 'ROE']].values
 
 y = df['Class'].values
@@ -364,7 +368,7 @@ best_model_tree_muti = grid_tree.best_estimator_
 print('muti=' + str(best_model_tree_muti.score(X_test_std, y_test)))
 
 # logistic Regression
-lr = LogisticRegression(max_iter = 1000, solver = 'lbfgs')
+lr = LogisticRegression(max_iter = 1000, solver = 'lbfgs', multi_class = 'auto')
 params_lr = {
     'C':range(1, 101),
     'random_state':[42]
@@ -382,4 +386,3 @@ print('muti=' + str(best_model_lr_muti.score(X_test_std, y_test)))
 
 # This part select the feature use for fitting(but seem to make no sense)
 # If you want to use it, run it before the StandardScaler after the model
-
