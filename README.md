@@ -21,4 +21,4 @@ Authors: Joseph Loss, Ruozhong Yang, Fengkai Xu, Biao Feng, and Yuchen Duan
 
 
 <!--![Alt text](relative/path/to/img.jpg?raw=true "Title")-->
-![alt tex](IE598_Final_Report.pdf)
+![Alt text](IE598_Final_Report.pdf?raw=true "Title")
